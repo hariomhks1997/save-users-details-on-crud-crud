@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        form{
+            background-color: yellow;
+            padding: 7rem;
+
+        }
+        body{
+           background-color: aqua; 
+           padding: 5px;
+           text-align: center;
+           margin:0
+
+
+
+        }
+        input{
+            background-color: blueviolet;
+        }
+        label{
+            background-color: white;
+            text-align: left;
+
+        }
+        header {
+         background: #f4f4f4;
+         padding: 1rem;
+         text-align: center;
+        }
+
+    </style>
+
+</head>
+<body>
+    <header>
+        <h1>Book Appointment App</h1>
+    </header>
+    <form onsubmit="saveTolocalstorage(event)">
+        <label>Name</label><br>
+        <input type="text" Name="username" id="usernametag" value="jhon"></input><br>
+        <label>Email</label><br>
+        <input type="email" Name="EmailId" id="emailtag" value="hariom@123"></input><br>
+        <label>Mobile Number</label><br>
+        <input type="text number" Name="MobileNo" id="mobiletag" value="7408835571"></input><br>
+        <button>Submit</button>
+    </form>
+    <ul id="listOfitems"></ul>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+    <script>
+     function saveTolocalstorage(event){
+        event.preventDefault();
+        const name=event.target.username.value;
+        const email=event.target.EmailId.value;
+        const mobile=event.target.MobileNo.value;
+        const obj={
+            name,
+            email,
+            mobile
+        }
+        axios.post("https://crudcrud.com/api/ccbdfb5a27a649e18857fdf432930a85/appointmentdata",obj)
+        .then((response)=>{
+            showUserOnScreen(response.data)
+            console.log(response)
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+        //localStorage.setItem(obj.email,JSON.stringify(obj))
+       ///showUserOnScreen(obj)
+        }
+        function showUserOnScreen(obj){
+        const parentElem = document.getElementById('listOfitems')
+        const childElem =document.createElement('li')
+        childElem.textContent= obj.name + '- ' + obj.email+ ' - '+obj.mobile
+    
+        var deletebtn=document.createElement('button')
+        deletebtn.appendChild(document.createTextNode('Delete'))
+        childElem.appendChild(deletebtn)
+        parentElem.appendChild(childElem)
+        deletebtn.onclick=()=>{
+            localStorage.removeItem(obj.email)
+            parentElem.removeChild(childElem)
+            childElem.appendChild(localStorage.getItem("obj.email"))
+        }
+        const editbutton=document.createElement('button')
+        editbutton.appendChild(document.createTextNode('Edit'))
+        childElem.appendChild(editbutton)
+        parentElem.appendChild(childElem)
+        editbutton.onclick=()=>{
+            localStorage.removeItem(obj.email)
+           parentElem.removeChild(childElem)
+            document.getElementById('usernametag').value =obj.name
+            document.getElementById('emailtag').value=obj.email
+            document.getElementById('mobiletag').value=obj.mobile
+        }
+    
+    
+    
+    
+    
+        //parentElem.innerHTML=`<li>${obj.name} - ${obj.email}</li>`
+        }
+    </script>
+</body>
+</html>
